@@ -47,6 +47,56 @@ LIMIT 10;
 
 
 (4)check server session info
+--Checking whether a user is connected
+SELECT datname FROM pg_stat_activity WHERE usename = 'bob';
+--Checking whether a computer is connected
+SELECT datname, usename, client_addr, client_port,application_name FROM pg_stat_activity;
+--Repeatedly executing a query in psql
+\watch 5--psql 5秒钟更新一次
+
+--Checking which queries are running
+--active session
+SELECT datname, usename, state, query FROM pg_stat_activity WHERE state = 'active';
+--check longest query
+SELECT
+current_timestamp - query_start AS runtime,
+datname, usename, query
+FROM pg_stat_activity
+WHERE state = 'active'
+ORDER BY 1 DESC;
+
+--more than 1 min
+SELECT
+current_timestamp - query_start AS runtime,
+datname, usename, query
+FROM pg_stat_activity
+WHERE state = 'active'
+AND current_timestamp - query_start > '1 min'
+ORDER BY 1 DESC;
+
+--Checking which queries are active or blocked.
+SELECT datname
+, usename
+, wait_event_type
+, wait_event
+, query
+FROM pg_stat_activity
+WHERE wait_event_type IS NOT NULL
+AND wait_event_type NOT IN ('Activity', 'Client');
+
+--Knowing who is blocking a query
+SELECT datname
+, usename
+, wait_event_type
+, wait_event
+, pg_blocking_pids(pid) AS blocked_by
+, query
+FROM pg_stat_activity
+WHERE wait_event_type IS NOT NULL
+AND wait_event_type NOT IN ('Activity', 'Client');
+
+--Killing a specific session
+pg_terminate_backend(PID)
 
 
 
