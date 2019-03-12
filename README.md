@@ -2,7 +2,7 @@
 Postgresql-Manage-and-Monitor-Notes
 
 
-1 安装部署
+#1 安装部署
 安装包下载地址
 PostgreSQL Database Download | EnterpriseDB
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads 
@@ -15,7 +15,7 @@ Linux
 Red Hat family：Fedora 28pgsql10/ Fedora 27pgsql9.6
 Ubuntu:  Ubuntu 14.04 LTSpgsql9.6--pgsql10
 
-2 SQL language
+#2 SQL language
 2.1 SQL Syntax
 
 2.2 Data Definition
@@ -32,7 +32,7 @@ Ubuntu:  Ubuntu 14.04 LTSpgsql9.6--pgsql10
 
 
  
-3 First steps
+#3 First steps
 3.1 Geting Postgresql
 3.2 Connecting to the PostgreSQL Server
 （1）connect parameters:
@@ -98,7 +98,7 @@ download：Downloads & Changelog https://omnidb.org/index.php/en/downloads-en
 
 
  
-4 Exploring the Database
+#4 Exploring the Database
 4.1 What version is the server?
 select  version()
 psql --version
@@ -146,7 +146,7 @@ LIMIT 10;
 
 
  
-5 Configuration
+#5 Configuration
 5.1 Reading the fine manual
 5.2 Planning a new database
 5.3 Changing parameters in your programs
@@ -164,7 +164,7 @@ LIMIT 10;
 
 
  
-6 Server Control
+#6 Server Control
 6.1 Starting the database server manually
 6.2 Stopping the server safely and quickly
 6.3 Stopping the server in an emergency
@@ -182,7 +182,7 @@ LIMIT 10;
 
 
  
-7 Monitoring and Diagnosis（gp_stat_activity）
+#7 Monitoring and Diagnosis（gp_stat_activity）
 7.1 Providing PostgreSQL information to monitoring tools
 7.2 Real-time viewing using pgAdmin or OmniDB
 7.3 Checking whether a user is connected
@@ -257,7 +257,7 @@ ANALYZE  --update statistics
 7.16 Producing a daily summary of log file errors
 7.17 Analyzing the real-time performance of your queries
  
-8 Regular Maintenance
+#8 Regular Maintenance
 8.1 Controlling automatic database maintenance
 8.2 Avoiding auto-freezing and page corruptions
 8.3 Removing issues that cause bloat
@@ -275,7 +275,7 @@ ANALYZE  --update statistics
 
 
  
-9 Performance and Concurrency
+#9 Performance and Concurrency
 
 9.1 Finding slow SQL statements
 SELECT calls, total_time, query FROM pg_stat_statements
@@ -298,5 +298,5 @@ ORDER BY total_time DESC LIMIT 10;
 
 
 参考文档
-postgresql-11-US.pdf
-PostgreSQL 10 Administration Cookbook.pdf
+>postgresql-11-US.pdf
+>PostgreSQL 10 Administration Cookbook.pdf
