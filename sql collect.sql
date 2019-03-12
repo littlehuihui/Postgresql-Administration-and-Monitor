@@ -1,5 +1,5 @@
 
-（1）check current session info
+# 1 check current session info
 --current database
 select current_database();
 --current user_ID
@@ -9,7 +9,7 @@ SELECT inet_server_addr(), inet_server_port();
 --VERSION
 select VERSION();
 
-(2)check current server info
+# 2 check current server info
 --What is the server uptime?
 SELECT date_trunc('second',
 current_timestamp - pg_postmaster_start_time()) as uptime;
@@ -19,7 +19,7 @@ select datname from pg_database;
 
 
 
-(3)check current database info 
+# 3 check current database info 
 --How many tables are there in a database?
 SELECT count(*) FROM information_schema.tables
 WHERE table_schema NOT IN ('information_schema',
@@ -46,7 +46,7 @@ LIMIT 10;
 
 
 
-(4)check server session info
+# 4 check server session info
 --Checking whether a user is connected
 SELECT datname FROM pg_stat_activity WHERE usename = 'bob';
 --Checking whether a computer is connected
@@ -100,16 +100,16 @@ pg_terminate_backend(PID)
 
 
 
-(5)check system_resources info
+# 5 check system_resources info
 
 
 
-(5)moniting and diagnosis
+# 6 moniting and diagnosis
 
 
 
 
-(6)performance 
+# 7 performance 
 
 
 

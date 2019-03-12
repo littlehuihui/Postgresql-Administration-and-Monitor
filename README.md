@@ -1,23 +1,36 @@
-# Postgresql-Manage-and-Monitor
-Postgresql-Manage-and-Monitor-Notes
+# Postgresql-Administration-and-Monitor
+Postgresql-Administration-and-Monitor-Notes
 
+PostgreSQL is an advanced SQL database server, available on a wide range of platforms. One of the clearest benefits of PostgreSQL is that it is open source.PostgreSQL has the following main features:
+Excellent SQL standards compliance, up to SQL: 2016
+Client-server architecture
+Highly concurrent design, where readers and writers don't block each other
+*Highly configurable and extensible for many types of applications*
+Excellent scalability and performance, with extensive tuning features
+Support for many kinds of data models, such as relational, post-relational (arrays, nested relations via record types), document (JSON and XML), and key/value
 
-#1 安装部署
+Performance and concurrency
+*PostgreSQL 10 can achieve **more than one million reads per second on a four socket server**, and it benchmarks at **more than 30,000 write transactions per second with full durability**. With advanced hardware even higher levels of performance are possible.*
+*PostgreSQL provides MVCC, which enables readers and writers to avoid blocking each other.*
+
+# 1 安装部署
 安装包下载地址
 PostgreSQL Database Download | EnterpriseDB
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads 
 
 Platform support
 Windows 
+pg10 X64-->2016, 2012 R2 & R1, 2008 R2, 7, 8, 10
+pg11 X64-->2016, 2012 R2 
  
 
 Linux 
-Red Hat family：Fedora 28pgsql10/ Fedora 27pgsql9.6
-Ubuntu:  Ubuntu 14.04 LTSpgsql9.6--pgsql10
+Red Hat family：Fedora 28-->pgsql10；
+                Fedora 27-->pgsql9.6
+Ubuntu:  Ubuntu 14.04 LTS-->（pgsql9.6——pgsql10）
 
-#2 SQL language
+# 2 SQL language
 2.1 SQL Syntax
-
 2.2 Data Definition
 2.3 Data Manipulation
 2.4 Queries
@@ -32,7 +45,7 @@ Ubuntu:  Ubuntu 14.04 LTSpgsql9.6--pgsql10
 
 
  
-#3 First steps
+# 3 First steps
 3.1 Geting Postgresql
 3.2 Connecting to the PostgreSQL Server
 （1）connect parameters:
@@ -60,7 +73,7 @@ The steps are as follows:
 listen_addresses = '*'
 （2） Add the following line as the first line of  pg_hba.conf to allow access to all
 databases for all users with an encrypted password:
-# TYPE DATABASE USER CIDR-ADDRESS METHOD
+#TYPE DATABASE USER CIDR-ADDRESS METHOD
 host all all 0.0.0.0/0 md5
 （3） After changing  listen_addresses , we restart the PostgreSQL server
 
@@ -98,7 +111,7 @@ download：Downloads & Changelog https://omnidb.org/index.php/en/downloads-en
 
 
  
-#4 Exploring the Database
+# 4 Exploring the Database
 4.1 What version is the server?
 select  version()
 psql --version
@@ -146,7 +159,7 @@ LIMIT 10;
 
 
  
-#5 Configuration
+# 5 Configuration
 5.1 Reading the fine manual
 5.2 Planning a new database
 5.3 Changing parameters in your programs
@@ -164,7 +177,7 @@ LIMIT 10;
 
 
  
-#6 Server Control
+# 6 Server Control
 6.1 Starting the database server manually
 6.2 Stopping the server safely and quickly
 6.3 Stopping the server in an emergency
@@ -182,7 +195,7 @@ LIMIT 10;
 
 
  
-#7 Monitoring and Diagnosis（gp_stat_activity）
+# 7 Monitoring and Diagnosis（gp_stat_activity）
 7.1 Providing PostgreSQL information to monitoring tools
 7.2 Real-time viewing using pgAdmin or OmniDB
 7.3 Checking whether a user is connected
@@ -257,7 +270,7 @@ ANALYZE  --update statistics
 7.16 Producing a daily summary of log file errors
 7.17 Analyzing the real-time performance of your queries
  
-#8 Regular Maintenance
+# 8 Regular Maintenance
 8.1 Controlling automatic database maintenance
 8.2 Avoiding auto-freezing and page corruptions
 8.3 Removing issues that cause bloat
@@ -275,7 +288,7 @@ ANALYZE  --update statistics
 
 
  
-#9 Performance and Concurrency
+# 9 Performance and Concurrency
 
 9.1 Finding slow SQL statements
 SELECT calls, total_time, query FROM pg_stat_statements
