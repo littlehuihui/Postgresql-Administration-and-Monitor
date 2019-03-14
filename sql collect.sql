@@ -6,10 +6,11 @@ select current_database();
 select CURRENT_USER;
 --current host and port (unix套接字除外，Unix环境下这里两个值都为NULL)
 SELECT inet_server_addr(), inet_server_port();
---VERSION
-select VERSION();
+
 
 # 2 check current server info
+--VERSION 
+select VERSION(); 
 --What is the server uptime?
 SELECT date_trunc('second',
 current_timestamp - pg_postmaster_start_time()) as uptime;
@@ -32,6 +33,10 @@ WHERE table_schema NOT IN ('information_schema', 'pg_catalog')
 --How much disk space does a database use?
 SELECT pg_database_size(current_database());
 SELECT sum(pg_database_size(datname)) from pg_database;
+--How much disk space does a table use?
+select pg_relation_size('TABLE_NAME');
+--see the total size of a table, including indexes and other related spaces
+select pg_total_relation_size('TABLE_NAME');
 --Which are my biggest tables?
 SELECT table_name
 ,pg_relation_size(table_schema || '.' || table_name) as size
