@@ -21,11 +21,11 @@ https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 Platform support
 Windows 
 pg10 X64-->2016, 2012 R2 & R1, 2008 R2, 7, 8, 10
-pg11 X64-->2016, 2012 R2 
+pg11 X64-->2016, 2012 R2   
  
 Linux 
-Red Hat family：Fedora 28-->pgsql10；
-                Fedora 27-->pgsql9.6
+Red Hat family：Fedora 28-->pgsql10；  
+                Fedora 27-->pgsql9.6  
 Ubuntu:  Ubuntu 14.04 LTS-->（pgsql9.6——pgsql10）
 
 
