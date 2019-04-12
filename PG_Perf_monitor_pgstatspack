@@ -1,0 +1,702 @@
+下载地址：http://pgfoundry.org/frs/download.php/3151/pgstatspack_version_2.3.1.tar.gz  
+注意：pgstatspack依赖于pg_stat_statements，需要提前做好相关配置。（PostgreSQL: Documentation: 11: F.29. pg_stat_statements https://www.postgresql.org/docs/current/pgstatstatements.html）  
+安装：
+[postgres@node2 tmp]$ tar -xvf pgstatspack_version_2.3.1.tar.gz 
+[postgres@node2 tmp]$ cd pgstatspack
+[postgres@node2 pgstatspack]$ ls
+bin  install_pgstats.sh  pgstatspack_sample_report.txt  pgstatspack_stat_explanation.txt  README  remove_pgstats.sh  sql  upgrade_pgstatspack.sh
+[postgres@node2 pgstatspack]$ ./install_pgstats.sh 
+Results for database template1
+Installing Statistics Package for database template1
+Results for database zabbix
+Installing Statistics Package for database zabbix
+ 
+创建snapshot
+[postgres@node2 pgstatspack]$ cd bin/
+[postgres@node2 bin]$ ls
+delete_snapshot.sh  pgstatspack_report.sh  snapshot.sh
+[postgres@node2 bin]$ ./snapshot.sh 
+Results for database test
+ pgstatspack_snap 
+------------------
+                1
+(1 row)
+[postgres@node2 bin]$ ./snapshot.sh 
+Results for database test
+ pgstatspack_snap 
+------------------
+                2
+(1 row)
+ 
+生成报告
+[postgres@node2 bin]$ ./pgstatspack_report.sh 
+/tmp/pgstatspack/bin /tmp/pgstatspack/bin
+Please specify a username: 
+postgres                                                      ----------数据库的用户
+List of available databases:
+ 
+1 .  test
+ 
+Please select a number from the above list [ 1 -  1 ] 
+1
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      2 | 2017-03-13 13:51:49.468888 | cron based snapshot
+      1 | 2017-03-13 13:51:38.407601 | cron based snapshot
+(5 rows)
+ 
+Enter start snapshot id : 1             ---------- 开始的snapshot 的id
+Enter stop snapshot id  : 2             ----------结束时的snapshot的id
+Using file name: /tmp/pgstatreport_test_1_2.txt
+###########################################################################################################
+PGStatspack version 2.3 by uwe.bartels@gmail.com
+###########################################################################################################
+ 
+Snapshot information
+Begin snapshot : 
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      1 | 2017-03-13 13:51:38.407601 | cron based snapshot
+(1 row)
+ 
+End snapshot   :
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      2 | 2017-03-13 13:51:49.468888 | cron based snapshot
+(1 row)
+ 
+Seconds in snapshot:  11.061287
+ 
+ 
+Database version
+                                                 version                                                 
+---------------------------------------------------------------------------------------------------------
+ PostgreSQL 9.6.1 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-4), 64-bit
+(1 row)
+ 
+Database information
+ current_database | dbsize  
+------------------+---------
+ test             | 8023 kB
+(1 row)
+ 
+ 
+Database statistics
+ database  | tps  | hitrate | lio_ps | pio_ps | rollbk_ps 
+-----------+------+---------+--------+--------+-----------
+ postgres  | 0.18 |   99.00 |  10.67 |   0.00 |      0.00
+ template1 | 0.18 |   98.00 |   6.24 |   0.00 |      0.00
+ test      | 0.18 |   98.00 | 687.53 |  12.20 |      0.00
+ template0 | 0.00 |    0.00 |   0.00 |   0.00 |      0.00
+(4 rows)
+ 
+ 
+Top 20 tables ordered by table size changes
+               table                | table_growth | index_growth 
+------------------------------------+--------------+--------------
+ pg_catalog.pg_enum                 |              |            0
+ pg_catalog.pg_foreign_server       |              |            0
+ pg_catalog.pg_default_acl          |              |            0
+ pg_catalog.pg_depend               |              |            0
+ pg_catalog.pg_extension            |              |            0
+ pg_catalog.pg_foreign_data_wrapper |              |            0
+ pg_catalog.pg_aggregate            |              |            0
+ pg_catalog.pg_database             |              |            0
+ pg_catalog.pg_amop                 |              |            0
+ pg_catalog.pg_amproc               |              |            0
+ pg_catalog.pg_event_trigger        |              |            0
+ pg_catalog.pg_attribute            |              |            0
+ pg_catalog.pg_authid               |              |            0
+ pg_catalog.pg_auth_members         |              |            0
+ pg_catalog.pg_cast                 |              |            0
+ pg_catalog.pg_class                |              |            0
+ pg_catalog.pg_collation            |              |            0
+ pg_catalog.pg_am                   |              |            0
+ pg_catalog.pg_conversion           |              |            0
+ pg_catalog.pg_foreign_table        |              |            0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by high table to index read ratio
+          table           | system_read_pct | table_read_pct | index_read_pct 
+--------------------------+-----------------+----------------+----------------
+ pg_catalog.pg_proc       |              36 |             98 |              1
+ pg_catalog.pg_class      |              30 |             88 |             11
+ public.pgstatspack_names |              13 |             82 |             17
+ pg_catalog.pg_index      |               8 |             92 |              7
+ pg_catalog.pg_attribute  |               4 |              0 |            100
+ pg_catalog.pg_opclass    |               3 |              0 |            100
+ pg_catalog.pg_namespace  |               1 |             28 |             71
+ pg_catalog.pg_am         |               0 |            100 |              0
+ pg_catalog.pg_database   |               0 |             64 |             36
+ pg_toast.pg_toast_2618   |               0 |              0 |            100
+ pg_toast.pg_toast_2619   |               0 |              0 |            100
+ pg_catalog.pg_aggregate  |               0 |              0 |            100
+ pg_catalog.pg_cast       |               0 |              0 |            100
+ pg_catalog.pg_amproc     |               0 |              0 |            100
+ pg_catalog.pg_statistic  |               0 |              0 |            100
+ pg_catalog.pg_rewrite    |               0 |              0 |            100
+ pg_catalog.pg_amop       |               0 |              0 |            100
+ pg_catalog.pg_authid     |               0 |              0 |            100
+ pg_catalog.pg_operator   |               0 |              0 |            100
+ pg_catalog.pg_tablespace |               0 |              0 |            100
+(20 rows)
+ 
+ 
+Top 20 tables ordered by inserts
+                 table                  | table_inserts 
+----------------------------------------+---------------
+ public.pgstatspack_names               |           285
+ public.pgstatspack_indexes             |           132
+ public.pgstatspack_tables              |            92
+ public.pgstatspack_settings            |            30
+ public.pgstatspack_database            |             4
+ public.pgstatspack_sequences           |             2
+ public.pgstatspack_bgwriter            |             1
+ public.pgstatspack_snap                |             1
+ information_schema.sql_sizing_profiles |             0
+ pg_catalog.pg_attrdef                  |             0
+ information_schema.sql_sizing          |             0
+ pg_catalog.pg_attribute                |             0
+ pg_catalog.pg_authid                   |             0
+ pg_catalog.pg_auth_members             |             0
+ information_schema.sql_languages       |             0
+ pg_catalog.pg_amproc                   |             0
+ pg_catalog.pg_amop                     |             0
+ information_schema.sql_parts           |             0
+ pg_catalog.pg_constraint               |             0
+ pg_catalog.pg_collation                |             0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by updates
+                   table                    | table_updates 
+--------------------------------------------+---------------
+ information_schema.sql_implementation_info |             0
+ information_schema.sql_languages           |             0
+ information_schema.sql_packages            |             0
+ information_schema.sql_parts               |             0
+ information_schema.sql_sizing              |             0
+ information_schema.sql_sizing_profiles     |             0
+ pg_catalog.pg_aggregate                    |             0
+ pg_catalog.pg_am                           |             0
+ pg_catalog.pg_amop                         |             0
+ pg_catalog.pg_amproc                       |             0
+ pg_catalog.pg_attrdef                      |             0
+ pg_catalog.pg_attribute                    |             0
+ pg_catalog.pg_authid                       |             0
+ pg_catalog.pg_auth_members                 |             0
+ pg_catalog.pg_cast                         |             0
+ pg_catalog.pg_class                        |             0
+ pg_catalog.pg_collation                    |             0
+ pg_catalog.pg_constraint                   |             0
+ pg_catalog.pg_conversion                   |             0
+ information_schema.sql_features            |             0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by deletes
+                   table                    | table_deletes 
+--------------------------------------------+---------------
+ information_schema.sql_implementation_info |             0
+ information_schema.sql_languages           |             0
+ information_schema.sql_packages            |             0
+ information_schema.sql_parts               |             0
+ information_schema.sql_sizing              |             0
+ information_schema.sql_sizing_profiles     |             0
+ pg_catalog.pg_aggregate                    |             0
+ pg_catalog.pg_am                           |             0
+ pg_catalog.pg_amop                         |             0
+ pg_catalog.pg_amproc                       |             0
+ pg_catalog.pg_attrdef                      |             0
+ pg_catalog.pg_attribute                    |             0
+ pg_catalog.pg_authid                       |             0
+ pg_catalog.pg_auth_members                 |             0
+ pg_catalog.pg_cast                         |             0
+ pg_catalog.pg_class                        |             0
+ pg_catalog.pg_collation                    |             0
+ pg_catalog.pg_constraint                   |             0
+ pg_catalog.pg_conversion                   |             0
+ information_schema.sql_features            |             0
+(20 rows)
+ 
+ 
+Tables ordered by percentage of tuples scanned
+          table           | rows_read_pct | tab_hitrate | idx_hitrate | tab_read | tab_hit | idx_read | idx_hit 
+--------------------------+---------------+-------------+-------------+----------+---------+----------+---------
+ pg_catalog.pg_proc       |            36 |          75 |          96 |       59 |     186 |        6 |     185
+ pg_catalog.pg_class      |            30 |          99 |          99 |        0 |     668 |        0 |    1341
+ public.pgstatspack_names |            13 |          99 |          99 |        5 |     667 |        7 |    1323
+ pg_catalog.pg_index      |             8 |          99 |          98 |        0 |     116 |        0 |      91
+ pg_catalog.pg_attribute  |             4 |          96 |          99 |        9 |     275 |        2 |     544
+ pg_catalog.pg_opclass    |             3 |          99 |          97 |        0 |     214 |        0 |      36
+ pg_catalog.pg_namespace  |             1 |          99 |          99 |        0 |     145 |        0 |     139
+ pg_catalog.pg_language   |             0 |          50 |          66 |        0 |       1 |        0 |       2
+ pg_catalog.pg_type       |             0 |          98 |          98 |        0 |      62 |        0 |      79
+ pg_toast.pg_toast_2618   |             0 |          20 |          88 |        7 |       2 |        0 |       8
+ pg_toast.pg_toast_2619   |             0 |           0 |           0 |        1 |       0 |        2 |       0
+ pg_catalog.pg_aggregate  |             0 |          50 |          66 |        0 |       1 |        0 |       2
+ pg_catalog.pg_cast       |             0 |          96 |          99 |        0 |      27 |        0 |     160
+ pg_catalog.pg_amproc     |             0 |          94 |          97 |        0 |      17 |        0 |      35
+ pg_catalog.pg_statistic  |             0 |          58 |          94 |        4 |       7 |        0 |      16
+ pg_catalog.pg_am         |             0 |          50 |           0 |        0 |       1 |        0 |       0
+ pg_catalog.pg_rewrite    |             0 |          53 |          92 |        5 |       7 |        0 |      12
+ pg_catalog.pg_amop       |             0 |          98 |          98 |        0 |      66 |        0 |      88
+ pg_catalog.pg_authid     |             0 |          80 |          88 |        0 |       4 |        0 |       8
+ pg_catalog.pg_operator   |             0 |          97 |          95 |        1 |      73 |        2 |      60
+ pg_catalog.pg_database   |             0 |          92 |          93 |        0 |      13 |        0 |      15
+ pg_catalog.pg_tablespace |             0 |          75 |          83 |        0 |       3 |        0 |       5
+ pg_toast.pg_toast_1255   |             0 |          66 |          75 |        0 |       2 |        0 |       3
+ pg_catalog.pg_attrdef    |             0 |          50 |          66 |        0 |       1 |        0 |       2
+(24 rows)
+ 
+ 
+Indexes ordered by scans
+                       index                        |             table             | scans | tup_read | tup_fetch | idx_blks_read | idx_blks_hit 
+----------------------------------------------------+-------------------------------+-------+----------+-----------+---------------+--------------
+ pg_catalog.pg_class_oid_index                      | pg_catalog.pg_class           |   631 |      631 |       510 |             0 |         1265
+ public.idx_pgstatspack_names_name                  | public.pgstatspack_names      |   368 |      362 |       362 |             5 |         1037
+ pg_catalog.pg_attribute_relid_attnum_index         | pg_catalog.pg_attribute       |   272 |      669 |       669 |             2 |          544
+ pg_catalog.pg_cast_source_target_index             | pg_catalog.pg_cast            |   159 |       27 |        27 |             0 |          160
+ pg_catalog.pg_namespace_oid_index                  | pg_catalog.pg_namespace       |   132 |      132 |       132 |             0 |          133
+ pg_catalog.pg_proc_oid_index                       | pg_catalog.pg_proc            |    87 |       87 |        87 |             2 |          173
+ pg_catalog.pg_index_indexrelid_index               | pg_catalog.pg_index           |    73 |       73 |        73 |             0 |           74
+ pg_catalog.pg_type_oid_index                       | pg_catalog.pg_type            |    59 |       58 |        58 |             0 |           60
+ pg_catalog.pg_class_relname_nsp_index              | pg_catalog.pg_class           |    37 |       25 |        25 |             0 |           75
+ pg_catalog.pg_amop_fam_strat_index                 | pg_catalog.pg_amop            |    28 |       28 |        28 |             0 |           57
+ pg_catalog.pg_opclass_oid_index                    | pg_catalog.pg_opclass         |    21 |       21 |        21 |             0 |           22
+ pg_catalog.pg_amproc_fam_proc_index                | pg_catalog.pg_amproc          |    17 |       25 |        25 |             0 |           35
+ pg_catalog.pg_operator_oid_index                   | pg_catalog.pg_operator        |    17 |       17 |        17 |             0 |           35
+ pg_catalog.pg_index_indrelid_index                 | pg_catalog.pg_index           |    16 |       23 |        23 |             0 |           17
+ pg_catalog.pg_amop_opr_fam_index                   | pg_catalog.pg_amop            |    15 |       38 |        38 |             0 |           31
+ pg_catalog.pg_statistic_relid_att_inh_index        | pg_catalog.pg_statistic       |    15 |       11 |        11 |             0 |           16
+ pg_catalog.pg_opclass_am_name_nsp_index            | pg_catalog.pg_opclass         |    13 |      542 |       542 |             0 |           14
+ pg_catalog.pg_operator_oprname_l_r_n_index         | pg_catalog.pg_operator        |    13 |       81 |        81 |             2 |           25
+ pg_catalog.pg_db_role_setting_databaseid_rol_index | pg_catalog.pg_db_role_setting |    12 |        0 |         0 |             0 |           12
+ pg_catalog.pg_rewrite_rel_rulename_index           | pg_catalog.pg_rewrite         |    11 |       13 |        13 |             0 |           12
+ pg_catalog.pg_type_typname_nsp_index               | pg_catalog.pg_type            |     9 |        4 |         4 |             0 |           19
+ pg_toast.pg_toast_2618_index                       | pg_toast.pg_toast_2618        |     7 |       20 |        20 |             0 |            8
+ pg_catalog.pg_proc_proname_args_nsp_index          | pg_catalog.pg_proc            |     7 |       22 |        22 |             4 |           12
+ pg_catalog.pg_namespace_nspname_index              | pg_catalog.pg_namespace       |     5 |        4 |         4 |             0 |            6
+ pg_catalog.pg_database_datname_index               | pg_catalog.pg_database        |     5 |        5 |         5 |             0 |            8
+ pg_catalog.pg_constraint_conrelid_index            | pg_catalog.pg_constraint      |     4 |        0 |         0 |             0 |            5
+ pg_catalog.pg_database_oid_index                   | pg_catalog.pg_database        |     4 |        4 |         4 |             0 |            7
+ pg_catalog.pg_tablespace_oid_index                 | pg_catalog.pg_tablespace      |     3 |        3 |         3 |             0 |            5
+ pg_catalog.pg_authid_oid_index                     | pg_catalog.pg_authid          |     2 |        2 |         2 |             0 |            4
+ pg_catalog.pg_authid_rolname_index                 | pg_catalog.pg_authid          |     2 |        2 |         2 |             0 |            4
+ pg_toast.pg_toast_1255_index                       | pg_toast.pg_toast_1255        |     2 |        4 |         4 |             0 |            3
+ pg_catalog.pg_aggregate_fnoid_index                | pg_catalog.pg_aggregate       |     1 |        1 |         1 |             0 |            2
+ pg_toast.pg_toast_2619_index                       | pg_toast.pg_toast_2619        |     1 |        1 |         1 |             2 |            0
+ pg_catalog.pg_attrdef_adrelid_adnum_index          | pg_catalog.pg_attrdef         |     1 |        1 |         1 |             0 |            2
+ pg_catalog.pg_language_oid_index                   | pg_catalog.pg_language        |     1 |        1 |         1 |             0 |            2
+ public.pgstatspack_indexes_pk                      | public.pgstatspack_indexes    |     0 |        0 |         0 |             2 |          132
+ public.pgstatspack_names_pkey                      | public.pgstatspack_names      |     0 |        0 |         0 |             2 |          286
+ public.pgstatspack_sequences_pk                    | public.pgstatspack_sequences  |     0 |        0 |         0 |             2 |            2
+ public.pgstatspack_settings_pk                     | public.pgstatspack_settings   |     0 |        0 |         0 |             2 |           30
+ public.pgstatspack_database_pk                     | public.pgstatspack_database   |     0 |        0 |         0 |             2 |            4
+ public.pgstatspack_tables_pk                       | public.pgstatspack_tables     |     0 |        0 |         0 |             2 |           92
+ public.pgstatspack_bgwriter_pk                     | public.pgstatspack_bgwriter   |     0 |        0 |         0 |             2 |            0
+ pg_catalog.pg_class_tblspc_relfilenode_index       | pg_catalog.pg_class           |     0 |        0 |         0 |             0 |            1
+(43 rows)
+ 
+ 
+Sequences ordered by blks_read
+         sequence         | blks_read | blks_hit 
+--------------------------+-----------+----------
+ public.pgstatspackid     |         0 |        1
+ public.pgstatspacknameid |         0 |      285
+(2 rows)
+ 
+ 
+Top 20 SQL statements ordered by total_time
+ calls | total_time | total_time_percent | rows | user | query 
+-------+------------+--------------------+------+------+-------
+(0 rows)
+ 
+ 
+Top 20 user functions ordered by total_time
+ funcid | function_name | calls | total_time | self_time 
+--------+---------------+-------+------------+-----------
+(0 rows)
+ 
+ 
+background writer stats
+ checkpoints_timed | checkpoints_req | buffers_checkpoint | buffers_clean | maxwritten_clean | buffers_backend | buffers_alloc 
+-------------------+-----------------+--------------------+---------------+------------------+-----------------+---------------
+                 0 |               0 |                  0 |             0 |                0 |               0 |           135
+(1 row)
+ 
+ 
+background writer relative stats
+ checkpoints_timed | minutes_between_checkpoint | buffers_checkpoint | buffers_clean | buffers_backend | total_writes | avg_checkpoint_write 
+-------------------+----------------------------+--------------------+---------------+-----------------+--------------+----------------------
+                   |                            |                    |               |                 | 0.000 MB/s   | 
+(1 row)
+ 
+ 
+Parameters
+            name            |            start_setting            |            stop_setting             |        source        
+----------------------------+-------------------------------------+-------------------------------------+----------------------
+ max_stack_depth            | 2048                                | 2048                                | environment variable
+ hba_file                   | /home/postgres/data/pg_hba.conf     | /home/postgres/data/pg_hba.conf     | override
+ lc_time                    | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ log_destination            | stderr                              | stderr                              | configuration file
+ ident_file                 | /home/postgres/data/pg_ident.conf   | /home/postgres/data/pg_ident.conf   | override
+ max_connections            | 100                                 | 100                                 | configuration file
+ TimeZone                   | PRC                                 | PRC                                 | configuration file
+ dynamic_shared_memory_type | posix                               | posix                               | configuration file
+ port                       | 5432                                | 5432                                | configuration file
+ application_name           | psql                                | psql                                | client
+ lc_numeric                 | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ wal_buffers                | 512                                 | 512                                 | override
+ lc_ctype                   | en_US.UTF-8                         | en_US.UTF-8                         | override
+ data_checksums             | off                                 | off                                 | override
+ client_encoding            | UTF8                                | UTF8                                | client
+ config_file                | /home/postgres/data/postgresql.conf | /home/postgres/data/postgresql.conf | override
+ transaction_deferrable     | off                                 | off                                 | override
+ lc_collate                 | en_US.UTF-8                         | en_US.UTF-8                         | override
+ lc_messages                | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ transaction_isolation      | read committed                      | read committed                      | override
+ default_text_search_config | pg_catalog.english                  | pg_catalog.english                  | configuration file
+ server_encoding            | UTF8                                | UTF8                                | override
+ transaction_read_only      | off                                 | off                                 | override
+ lc_monetary                | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ logging_collector          | on                                  | on                                  | configuration file
+ DateStyle                  | ISO, MDY                            | ISO, MDY                            | configuration file
+ listen_addresses           | *                                   | *                                   | configuration file
+ shared_buffers             | 16384                               | 16384                               | configuration file
+ data_directory             | /home/postgres/data                 | /home/postgres/data                 | override
+ log_timezone               | PRC                                 | PRC                                 | configuration file
+(30 rows)
+ 
+ 
+This report is saved as /tmp/pgstatreport_test_1_2.txt        ------生成文件的位置和文件名
+ 
+/tmp/pgstatspack/bin
+ 
+查看一下文件中的内容
+###########################################################################################################
+PGStatspack version 2.3 by uwe.bartels@gmail.com
+###########################################################################################################
+ 
+Snapshot information
+Begin snapshot : 
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      1 | 2017-03-13 13:51:38.407601 | cron based snapshot
+(1 row)
+ 
+End snapshot   :
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      2 | 2017-03-13 13:51:49.468888 | cron based snapshot
+(1 row)
+ 
+Seconds in snapshot:  11.061287
+ 
+ 
+Database version
+                                                 version                                                 
+---------------------------------------------------------------------------------------------------------
+ PostgreSQL 9.6.1 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-4), 64-bit
+(1 row)
+ 
+ current_database | dbsize  
+------------------+---------
+ test             | 8023 kB
+(1 row)
+ 
+ 
+Database statistics
+ database  | tps  | hitrate | lio_ps | pio_ps | rollbk_ps 
+-----------+------+---------+--------+--------+-----------
+ postgres  | 0.18 |   99.00 |  10.67 |   0.00 |      0.00
+ template1 | 0.18 |   98.00 |   6.24 |   0.00 |      0.00
+ test      | 0.18 |   98.00 | 687.53 |  12.20 |      0.00
+ template0 | 0.00 |    0.00 |   0.00 |   0.00 |      0.00
+(4 rows)
+ 
+ 
+Top 20 tables ordered by table size changes
+               table                | table_growth | index_growth 
+------------------------------------+--------------+--------------
+ pg_catalog.pg_enum                 |              |            0
+ pg_catalog.pg_foreign_server       |              |            0
+ pg_catalog.pg_default_acl          |              |            0
+ pg_catalog.pg_depend               |              |            0
+ pg_catalog.pg_extension            |              |            0
+ pg_catalog.pg_foreign_data_wrapper |              |            0
+ pg_catalog.pg_aggregate            |              |            0
+ pg_catalog.pg_database             |              |            0
+ pg_catalog.pg_amop                 |              |            0
+ pg_catalog.pg_amproc               |              |            0
+ pg_catalog.pg_event_trigger        |              |            0
+ pg_catalog.pg_attribute            |              |            0
+ pg_catalog.pg_authid               |              |            0
+ pg_catalog.pg_auth_members         |              |            0
+ pg_catalog.pg_cast                 |              |            0
+ pg_catalog.pg_class                |              |            0
+ pg_catalog.pg_collation            |              |            0
+ pg_catalog.pg_am                   |              |            0
+ pg_catalog.pg_conversion           |              |            0
+ pg_catalog.pg_foreign_table        |              |            0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by high table to index read ratio
+          table           | system_read_pct | table_read_pct | index_read_pct 
+--------------------------+-----------------+----------------+----------------
+ pg_catalog.pg_proc       |              36 |             98 |              1
+ pg_catalog.pg_class      |              30 |             88 |             11
+ public.pgstatspack_names |              13 |             82 |             17
+ pg_catalog.pg_index      |               8 |             92 |              7
+ pg_catalog.pg_attribute  |               4 |              0 |            100
+ pg_catalog.pg_opclass    |               3 |              0 |            100
+ pg_catalog.pg_namespace  |               1 |             28 |             71
+ pg_catalog.pg_am         |               0 |            100 |              0
+ pg_catalog.pg_database   |               0 |             64 |             36
+ pg_toast.pg_toast_2618   |               0 |              0 |            100
+ pg_toast.pg_toast_2619   |               0 |              0 |            100
+ pg_catalog.pg_aggregate  |               0 |              0 |            100
+ pg_catalog.pg_cast       |               0 |              0 |            100
+ pg_catalog.pg_amproc     |               0 |              0 |            100
+ pg_catalog.pg_statistic  |               0 |              0 |            100
+ pg_catalog.pg_rewrite    |               0 |              0 |            100
+ pg_catalog.pg_amop       |               0 |              0 |            100
+ pg_catalog.pg_authid     |               0 |              0 |            100
+ pg_catalog.pg_operator   |               0 |              0 |            100
+ pg_catalog.pg_tablespace |               0 |              0 |            100
+(20 rows)
+ 
+ 
+Top 20 tables ordered by inserts
+                 table                  | table_inserts 
+----------------------------------------+---------------
+ public.pgstatspack_names               |           285
+ public.pgstatspack_indexes             |           132
+ public.pgstatspack_tables              |            92
+ public.pgstatspack_settings            |            30
+ public.pgstatspack_database            |             4
+ public.pgstatspack_sequences           |             2
+ public.pgstatspack_bgwriter            |             1
+ public.pgstatspack_snap                |             1
+ information_schema.sql_sizing_profiles |             0
+ pg_catalog.pg_attrdef                  |             0
+ information_schema.sql_sizing          |             0
+ pg_catalog.pg_attribute                |             0
+ pg_catalog.pg_authid                   |             0
+ pg_catalog.pg_auth_members             |             0
+ information_schema.sql_languages       |             0
+ pg_catalog.pg_amproc                   |             0
+ pg_catalog.pg_amop                     |             0
+ information_schema.sql_parts           |             0
+ pg_catalog.pg_constraint               |             0
+ pg_catalog.pg_collation                |             0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by updates
+                   table                    | table_updates 
+--------------------------------------------+---------------
+ information_schema.sql_implementation_info |             0
+ information_schema.sql_languages           |             0
+ information_schema.sql_packages            |             0
+ information_schema.sql_parts               |             0
+ information_schema.sql_sizing              |             0
+ information_schema.sql_sizing_profiles     |             0
+ pg_catalog.pg_aggregate                    |             0
+ pg_catalog.pg_am                           |             0
+ pg_catalog.pg_amop                         |             0
+ pg_catalog.pg_amproc                       |             0
+ pg_catalog.pg_attrdef                      |             0
+ pg_catalog.pg_attribute                    |             0
+ pg_catalog.pg_authid                       |             0
+ pg_catalog.pg_auth_members                 |             0
+ pg_catalog.pg_cast                         |             0
+ pg_catalog.pg_class                        |             0
+ pg_catalog.pg_collation                    |             0
+ pg_catalog.pg_constraint                   |             0
+ pg_catalog.pg_conversion                   |             0
+ information_schema.sql_features            |             0
+(20 rows)
+ 
+ 
+Top 20 tables ordered by deletes
+                   table                    | table_deletes 
+--------------------------------------------+---------------
+ information_schema.sql_implementation_info |             0
+ information_schema.sql_languages           |             0
+ information_schema.sql_packages            |             0
+ information_schema.sql_parts               |             0
+ information_schema.sql_sizing              |             0
+ information_schema.sql_sizing_profiles     |             0
+ pg_catalog.pg_aggregate                    |             0
+ pg_catalog.pg_am                           |             0
+ pg_catalog.pg_amop                         |             0
+ pg_catalog.pg_amproc                       |             0
+ pg_catalog.pg_attrdef                      |             0
+ pg_catalog.pg_attribute                    |             0
+ pg_catalog.pg_authid                       |             0
+ pg_catalog.pg_auth_members                 |             0
+ pg_catalog.pg_cast                         |             0
+ pg_catalog.pg_class                        |             0
+ pg_catalog.pg_collation                    |             0
+ pg_catalog.pg_constraint                   |             0
+ pg_catalog.pg_conversion                   |             0
+ information_schema.sql_features            |             0
+(20 rows)
+ 
+ 
+Tables ordered by percentage of tuples scanned
+          table           | rows_read_pct | tab_hitrate | idx_hitrate | tab_read | tab_hit | idx_read | idx_hit 
+--------------------------+---------------+-------------+-------------+----------+---------+----------+---------
+ pg_catalog.pg_proc       |            36 |          75 |          96 |       59 |     186 |        6 |     185
+ pg_catalog.pg_class      |            30 |          99 |          99 |        0 |     668 |        0 |    1341
+ public.pgstatspack_names |            13 |          99 |          99 |        5 |     667 |        7 |    1323
+ pg_catalog.pg_index      |             8 |          99 |          98 |        0 |     116 |        0 |      91
+ pg_catalog.pg_attribute  |             4 |          96 |          99 |        9 |     275 |        2 |     544
+ pg_catalog.pg_opclass    |             3 |          99 |          97 |        0 |     214 |        0 |      36
+ pg_catalog.pg_namespace  |             1 |          99 |          99 |        0 |     145 |        0 |     139
+ pg_catalog.pg_language   |             0 |          50 |          66 |        0 |       1 |        0 |       2
+ pg_catalog.pg_type       |             0 |          98 |          98 |        0 |      62 |        0 |      79
+ pg_toast.pg_toast_2618   |             0 |          20 |          88 |        7 |       2 |        0 |       8
+ pg_toast.pg_toast_2619   |             0 |           0 |           0 |        1 |       0 |        2 |       0
+ pg_catalog.pg_aggregate  |             0 |          50 |          66 |        0 |       1 |        0 |       2
+ pg_catalog.pg_cast       |             0 |          96 |          99 |        0 |      27 |        0 |     160
+ pg_catalog.pg_amproc     |             0 |          94 |          97 |        0 |      17 |        0 |      35
+ pg_catalog.pg_statistic  |             0 |          58 |          94 |        4 |       7 |        0 |      16
+ pg_catalog.pg_am         |             0 |          50 |           0 |        0 |       1 |        0 |       0
+ pg_catalog.pg_rewrite    |             0 |          53 |          92 |        5 |       7 |        0 |      12
+ pg_catalog.pg_amop       |             0 |          98 |          98 |        0 |      66 |        0 |      88
+ pg_catalog.pg_authid     |             0 |          80 |          88 |        0 |       4 |        0 |       8
+ pg_catalog.pg_operator   |             0 |          97 |          95 |        1 |      73 |        2 |      60
+ pg_catalog.pg_database   |             0 |          92 |          93 |        0 |      13 |        0 |      15
+ pg_catalog.pg_tablespace |             0 |          75 |          83 |        0 |       3 |        0 |       5
+ pg_toast.pg_toast_1255   |             0 |          66 |          75 |        0 |       2 |        0 |       3
+ pg_catalog.pg_attrdef    |             0 |          50 |          66 |        0 |       1 |        0 |       2
+(24 rows)
+ 
+ 
+Indexes ordered by scans
+                       index                        |             table             | scans | tup_read | tup_fetch | idx_blks_read | idx_blks_hit 
+----------------------------------------------------+-------------------------------+-------+----------+-----------+---------------+--------------
+ pg_catalog.pg_class_oid_index                      | pg_catalog.pg_class           |   631 |      631 |       510 |             0 |         1265
+ public.idx_pgstatspack_names_name                  | public.pgstatspack_names      |   368 |      362 |       362 |             5 |         1037
+ pg_catalog.pg_attribute_relid_attnum_index         | pg_catalog.pg_attribute       |   272 |      669 |       669 |             2 |          544
+ pg_catalog.pg_cast_source_target_index             | pg_catalog.pg_cast            |   159 |       27 |        27 |             0 |          160
+ pg_catalog.pg_namespace_oid_index                  | pg_catalog.pg_namespace       |   132 |      132 |       132 |             0 |          133
+ pg_catalog.pg_proc_oid_index                       | pg_catalog.pg_proc            |    87 |       87 |        87 |             2 |          173
+ pg_catalog.pg_index_indexrelid_index               | pg_catalog.pg_index           |    73 |       73 |        73 |             0 |           74
+ pg_catalog.pg_type_oid_index                       | pg_catalog.pg_type            |    59 |       58 |        58 |             0 |           60
+ pg_catalog.pg_class_relname_nsp_index              | pg_catalog.pg_class           |    37 |       25 |        25 |             0 |           75
+ pg_catalog.pg_amop_fam_strat_index                 | pg_catalog.pg_amop            |    28 |       28 |        28 |             0 |           57
+ pg_catalog.pg_opclass_oid_index                    | pg_catalog.pg_opclass         |    21 |       21 |        21 |             0 |           22
+ pg_catalog.pg_amproc_fam_proc_index                | pg_catalog.pg_amproc          |    17 |       25 |        25 |             0 |           35
+ pg_catalog.pg_operator_oid_index                   | pg_catalog.pg_operator        |    17 |       17 |        17 |             0 |           35
+ pg_catalog.pg_index_indrelid_index                 | pg_catalog.pg_index           |    16 |       23 |        23 |             0 |           17
+ pg_catalog.pg_amop_opr_fam_index                   | pg_catalog.pg_amop            |    15 |       38 |        38 |             0 |           31
+ pg_catalog.pg_statistic_relid_att_inh_index        | pg_catalog.pg_statistic       |    15 |       11 |        11 |             0 |           16
+ pg_catalog.pg_opclass_am_name_nsp_index            | pg_catalog.pg_opclass         |    13 |      542 |       542 |             0 |           14
+ pg_catalog.pg_operator_oprname_l_r_n_index         | pg_catalog.pg_operator        |    13 |       81 |        81 |             2 |           25
+ pg_catalog.pg_db_role_setting_databaseid_rol_index | pg_catalog.pg_db_role_setting |    12 |        0 |         0 |             0 |           12
+ pg_catalog.pg_rewrite_rel_rulename_index           | pg_catalog.pg_rewrite         |    11 |       13 |        13 |             0 |           12
+ pg_catalog.pg_type_typname_nsp_index               | pg_catalog.pg_type            |     9 |        4 |         4 |             0 |           19
+ pg_toast.pg_toast_2618_index                       | pg_toast.pg_toast_2618        |     7 |       20 |        20 |             0 |            8
+ pg_catalog.pg_proc_proname_args_nsp_index          | pg_catalog.pg_proc            |     7 |       22 |        22 |             4 |           12
+ pg_catalog.pg_namespace_nspname_index              | pg_catalog.pg_namespace       |     5 |        4 |         4 |             0 |            6
+ pg_catalog.pg_database_datname_index               | pg_catalog.pg_database        |     5 |        5 |         5 |             0 |            8
+ pg_catalog.pg_constraint_conrelid_index            | pg_catalog.pg_constraint      |     4 |        0 |         0 |             0 |            5
+ pg_catalog.pg_database_oid_index                   | pg_catalog.pg_database        |     4 |        4 |         4 |             0 |            7
+ pg_catalog.pg_tablespace_oid_index                 | pg_catalog.pg_tablespace      |     3 |        3 |         3 |             0 |            5
+ pg_catalog.pg_authid_oid_index                     | pg_catalog.pg_authid          |     2 |        2 |         2 |             0 |            4
+ pg_catalog.pg_authid_rolname_index                 | pg_catalog.pg_authid          |     2 |        2 |         2 |             0 |            4
+ pg_toast.pg_toast_1255_index                       | pg_toast.pg_toast_1255        |     2 |        4 |         4 |             0 |            3
+ pg_catalog.pg_aggregate_fnoid_index                | pg_catalog.pg_aggregate       |     1 |        1 |         1 |             0 |            2
+ pg_toast.pg_toast_2619_index                       | pg_toast.pg_toast_2619        |     1 |        1 |         1 |             2 |            0
+ pg_catalog.pg_attrdef_adrelid_adnum_index          | pg_catalog.pg_attrdef         |     1 |        1 |         1 |             0 |            2
+ pg_catalog.pg_language_oid_index                   | pg_catalog.pg_language        |     1 |        1 |         1 |             0 |            2
+ public.pgstatspack_indexes_pk                      | public.pgstatspack_indexes    |     0 |        0 |         0 |             2 |          132
+ public.pgstatspack_names_pkey                      | public.pgstatspack_names      |     0 |        0 |         0 |             2 |          286
+ public.pgstatspack_sequences_pk                    | public.pgstatspack_sequences  |     0 |        0 |         0 |             2 |            2
+ public.pgstatspack_settings_pk                     | public.pgstatspack_settings   |     0 |        0 |         0 |             2 |           30
+ public.pgstatspack_database_pk                     | public.pgstatspack_database   |     0 |        0 |         0 |             2 |            4
+ public.pgstatspack_tables_pk                       | public.pgstatspack_tables     |     0 |        0 |         0 |             2 |           92
+ public.pgstatspack_bgwriter_pk                     | public.pgstatspack_bgwriter   |     0 |        0 |         0 |             2 |            0
+ pg_catalog.pg_class_tblspc_relfilenode_index       | pg_catalog.pg_class           |     0 |        0 |         0 |             0 |            1
+(43 rows)
+ 
+ 
+Sequences ordered by blks_read
+         sequence         | blks_read | blks_hit 
+--------------------------+-----------+----------
+ public.pgstatspackid     |         0 |        1
+ public.pgstatspacknameid |         0 |      285
+(2 rows)
+ 
+ 
+Top 20 SQL statements ordered by total_time
+ calls | total_time | total_time_percent | rows | user | query 
+-------+------------+--------------------+------+------+-------
+(0 rows)
+ 
+ 
+Top 20 user functions ordered by total_time
+ funcid | function_name | calls | total_time | self_time 
+--------+---------------+-------+------------+-----------
+(0 rows)
+ 
+ 
+background writer stats
+ checkpoints_timed | checkpoints_req | buffers_checkpoint | buffers_clean | maxwritten_clean | buffers_backend | buffers_alloc 
+-------------------+-----------------+--------------------+---------------+------------------+-----------------+---------------
+                 0 |               0 |                  0 |             0 |                0 |               0 |           135
+(1 row)
+ 
+ 
+background writer relative stats
+ checkpoints_timed | minutes_between_checkpoint | buffers_checkpoint | buffers_clean | buffers_backend | total_writes | avg_checkpoint_write 
+-------------------+----------------------------+--------------------+---------------+-----------------+--------------+----------------------
+                   |                            |                    |               |                 | 0.000 MB/s   | 
+(1 row)
+ 
+ 
+Parameters
+            name            |            start_setting            |            stop_setting             |        source        
+----------------------------+-------------------------------------+-------------------------------------+----------------------
+ max_stack_depth            | 2048                                | 2048                                | environment variable
+ hba_file                   | /home/postgres/data/pg_hba.conf     | /home/postgres/data/pg_hba.conf     | override
+ lc_time                    | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ log_destination            | stderr                              | stderr                              | configuration file
+ ident_file                 | /home/postgres/data/pg_ident.conf   | /home/postgres/data/pg_ident.conf   | override
+ max_connections            | 100                                 | 100                                 | configuration file
+ TimeZone                   | PRC                                 | PRC                                 | configuration file
+ dynamic_shared_memory_type | posix                               | posix                               | configuration file
+ port                       | 5432                                | 5432                                | configuration file
+ application_name           | psql                                | psql                                | client
+ lc_numeric                 | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ wal_buffers                | 512                                 | 512                                 | override
+ lc_ctype                   | en_US.UTF-8                         | en_US.UTF-8                         | override
+ data_checksums             | off                                 | off                                 | override
+ client_encoding            | UTF8                                | UTF8                                | client
+ config_file                | /home/postgres/data/postgresql.conf | /home/postgres/data/postgresql.conf | override
+ transaction_deferrable     | off                                 | off                                 | override
+ lc_collate                 | en_US.UTF-8                         | en_US.UTF-8                         | override
+ lc_messages                | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ transaction_isolation      | read committed                      | read committed                      | override
+ default_text_search_config | pg_catalog.english                  | pg_catalog.english                  | configuration file
+ server_encoding            | UTF8                                | UTF8                                | override
+ transaction_read_only      | off                                 | off                                 | override
+ lc_monetary                | en_US.UTF-8                         | en_US.UTF-8                         | configuration file
+ logging_collector          | on                                  | on                                  | configuration file
+ DateStyle                  | ISO, MDY                            | ISO, MDY                            | configuration file
+ listen_addresses           | *                                   | *                                   | configuration file
+ shared_buffers             | 16384                               | 16384                               | configuration file
+ data_directory             | /home/postgres/data                 | /home/postgres/data                 | override
+ log_timezone               | PRC                                 | PRC                                 | configuration file
+(30 rows)
+
+--------------------- 
+作者：奈何流年 
+来源：CSDN 
+原文：https://blog.csdn.net/silenceray/article/details/61921459 
+版权声明：本文为博主原创文章，转载请附上博文链接！

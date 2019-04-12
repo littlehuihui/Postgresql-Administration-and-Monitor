@@ -207,7 +207,7 @@ ALTER SYSTEM SET shared_buffers = '1GB';
 4.7 Setting parameters for particular groups of users  
 （1）For all users in the  saas database, use the following commands:
 ALTER DATABASE saas
-SET configuration_parameter = value1;
+SET configuration_parameter = value1;  
 （2）For a user named  simon connected to any database, use this:  
 ALTER ROLE simon
 SET configuration_parameter = value2;  
